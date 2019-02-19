@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-
-
 import requests
 from bs4 import BeautifulSoup
+from datetime import datetime
+from config import *
 
 year="2019"
 
@@ -47,9 +47,13 @@ for ul in div.find_all('ul'):
 ical=[]
 ical.append(
 '''BEGIN:VCALENDAR
+PRODID:-//Xinmedia Inc//xinmedia_bike_ical//TW
 VERSION:2.0
+METHOD:PUBLISH
 TZID:Asia/Taipei'''
 )
+
+ical.append("COMMENT:"+datetime.utcnow().strftime("%F%T"))
 
 for event in event_list:
 	ical.append('BEGIN:VEVENT')
@@ -64,6 +68,7 @@ ical.append('''END:VCALENDAR''')
 ical_text = '\n'.join(ical)
 
 
-
+with open(config['gist_filename'], 'w') as file:
+	file.write(ical_text)
 
 
